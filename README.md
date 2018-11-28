@@ -88,8 +88,8 @@ this will give you some idea of how well your hass server can communicate with e
 
 2. Copy files:
 
-        # HA_HOME is where your configuration.yaml is, /config for hass.io
-        export HA_HOME=/config
+        # HA_HOME is where your configuration.yaml is, /usr/share/hassio/homeassistant for hass.io host
+        export HA_HOME=/usr/share/hassio/homeassistant
         cp examples/mysmartblinds.py ${HA_HOME}/custom_components/cover/
         cp pysmartblinds/pysmartblinds.py ${HA_HOME}/deps/lib/python3.6/site-packages/
 
