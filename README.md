@@ -114,4 +114,4 @@ this will give you some idea of how well your hass server can communicate with e
 
 For troubleshooting, it's a good idea tail the hass logs looking for mentions of the cover domain or pygatt (BLE stack) using a command something like this:
 
-    tail -f home-assistant.log | egrep -A10 -e "pygatt.backends.gatttool.gatttool|domain=cover"
+    tail -F ${HA_HOME}/home-assistant.log | egrep -A10 -e "pygatt.backends.gatttool.gatttool|domain=cover"
