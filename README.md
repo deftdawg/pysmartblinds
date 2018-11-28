@@ -69,3 +69,49 @@ so.
 
 `search.py` in the examples folder wraps this functionality; just run it and see
 what it returns.
+
+# Home Assistant
+
+## Check BLE signal between hass server and blinds
+
+Check that your hass server can reach the blinds via BLE:
+
+    sudo hcitool lescan | head -200 | grep SmartBlind_DFU | sort | uniq -c | sort -rn
+    # Give the blinds reliability connection score...
+    sudo hciconfig hci0 down  # the scan can kill hci0, so bring down and up again
+    sudo hciconfig hci0 up
+this will give you some idea of how well your hass server can communicate with each blind.
+
+## HASS / hass.io setup
+
+1. Run examples/search.py and take note of the blind addresses and their scan keys.
+
+2. Copy files:
+
+        # HA_HOME is where your configuration.yaml is, /config for hass.io
+        export HA_HOME=/config
+        cp examples/mysmartblinds.py ${HA_HOME}/custom_components/cover/
+        cp pysmartblinds/pysmartblinds.py ${HA_HOME}/deps/lib/python3.6/site-packages/
+
+2. Create configuration blocks for your blinds in your ${HA_HOME}/configuration.yaml (change as appropriate):
+
+        cover:
+          - platform: mysmartblinds
+            blinds:
+              first_blind:
+                friendly_name: Sunroom NxNE
+                mac: 'AA:BB:CC:DD:EE:FF'
+                access_token: 'd0'
+              another_blind:
+                friendly_name: Sunroom NxNW
+                mac: 'A1:B1:C1:D1:E1:F1'
+                access_token: '12'
+              ...
+
+4. Restart Home Assistant
+
+## Troubleshooting
+
+For troubleshooting, it's a good idea tail the hass logs looking for mentions of the cover domain or pygatt (BLE stack) using a command something like this:
+
+    tail -f home-assistant.log | egrep -A10 -e "pygatt.backends.gatttool.gatttool|domain=cover"
